@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "name": "kanbas-node-server-app",
+  "version": "1.0.0",
+  "description": "Kanbas web server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node App.js"
+  },
+  "author": "Connor Clancy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
