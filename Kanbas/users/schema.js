@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
     role: {
       type: String,
       enum: ["STUDENT", "FACULTY", "ADMIN", "USER"],
-      default: "USER",},
+      //default: "USER",
+    },
   },
 
   // store data in the "users" collection

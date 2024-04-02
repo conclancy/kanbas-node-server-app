@@ -1,7 +1,5 @@
 import * as dao from "./dao.js";
 
-let currentUser = null;
-
 export default function UserRoutes(app) {
   
     // create a new user
@@ -27,10 +25,10 @@ export default function UserRoutes(app) {
           const users = await dao.findUsersByRole(role);
           res.json(users);
           return;
+        } else {
+            const users = await dao.findAllUsers();
+            res.json(users);
         }
-
-        const users = await dao.findAllUsers();
-        res.json(users);
     };
     app.get("/api/users", findAllUsers);
 
@@ -45,30 +43,68 @@ export default function UserRoutes(app) {
     const updateUser = async (req, res) => {
         const { userId } = req.params;
         const status = await dao.updateUser(userId, req.body);
-        currentUser = await dao.findUserById(userId);
+        const currentUser = await dao.findUserById(userId);
         res.json(status);
     };
     app.put("/api/users/:userId", updateUser);
 
-    //
-    const signup = async (req, res) => { };
+    // implement user sign up functionality
+    const signup = async (req, res) => {
+        const user = await dao.findUserByUsername(req.body.username);
+        if (user) {
+            res.status(400).json({ message: "Username already taken" });
+        } else {
+            const currentUser = await dao.createUser(req.body);
+            req.session["currentUser"] = currentUser;
+            res.json(currentUser);
+        }
+        
+    };
     app.post("/api/users/signup", signup);
 
     // sign a user into the application
     const signin = async (req, res) => {
+        console.log("------> signin requestBody:", req.body)
         const { username, password } = req.body;
-        currentUser = await dao.findUserByCredentials(username, password);
-        res.json(currentUser);
+        const currentUser = await dao.findUserByCredentials(username, password);
+        console.log("------> signin currentUser:", currentUser)
+        if (currentUser) {
+            req.session["currentUser"] = currentUser;
+            res.json(currentUser);
+        } else {
+            res.sendStatus(401).json({ message: "Invalid username or password" });
+        }
     };
     app.post("/api/users/signin", signin);
 
-    //
-    const signout = (req, res) => { };
+    // sign current user out 
+    const signout = (req, res) => {
+        req.session.destroy();
+        res.sendStatus(200);
+    };
     app.post("/api/users/signout", signout);
+    
 
     // route to logged-in user's profile
     const profile = async (req, res) => {
-        res.json(currentUser);
+        const currentUser = req.session["currentUser"];
+        if (!currentUser) {
+            res.sendStatus(401).json({ message: "Invalid username or password" });
+        } else {
+            res.json(currentUser);
+        }
     };
     app.post("/api/users/profile", profile);
+
+     // route to logged-in user's profile
+     const getProfile = async (req, res) => {
+        const currentUser = req.session["currentUser"];
+        console.log(currentUser)
+        if (!currentUser) {
+            res.sendStatus(401).json({ message: "Invalid username or password" });
+        } else {
+            res.json(currentUser);
+        }
+    };
+    app.get("/api/users/profile", getProfile);
 }
