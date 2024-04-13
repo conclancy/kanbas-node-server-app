@@ -41,7 +41,7 @@ if (process.env.NODE_ENV !== "development") {
       domain: process.env.HTTP_SERVER_DOMAIN,
     };
 }
-  
+
 // configure the server to use cookies
 app.use(session(sessionOptions));
 
