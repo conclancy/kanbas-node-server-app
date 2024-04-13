@@ -7,7 +7,7 @@ export const createQuiz = (quiz) => model.create(quiz);
 export const findAllQuizzes = () => model.find();
 
 // find all quizes by course 
-export const findAllCourseQuizzes = (courseId) => model.find(courseId);
+export const findAllCourseQuizzes = (courseId) => model.find({courseId: courseId});
 
 // find quiz by id 
 export const findQuizById = (quizId) => model.findById(quizId);
