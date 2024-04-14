@@ -26,6 +26,7 @@ const quizSchema = new mongoose.Schema({
     availableDate: { type: Date },
     untilDate: { type: Date },
     courseId: { type: String },
+    published: { type: Boolean, default: false },
 },
 { 
     // store data in "quizes" collection
