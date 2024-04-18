@@ -32,7 +32,6 @@ export default function QuestionRoutes(app) {
 
     // update a question
     const updateQuestion = async (req, res) => {
-        console.log(req.body);
         const { questionId } = req.params;
         const status = await dao.updateQuestion(questionId, req.body);
         res.json(status);
