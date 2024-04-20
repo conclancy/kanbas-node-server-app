@@ -7,6 +7,8 @@ import CourseRoutes from "./Kanbas/courses/routes.js";
 import ModuleRoutes from "./Kanbas/modules/routes.js";
 import AssignmentRoutes from './Kanbas/assignments/routes.js';
 import mongoose from 'mongoose';
+import QuizRoutes from "./Kanbas/quizes/routes.js";
+import QuestionRoutes from "./Kanbas/questions/routes.js";
 import UserRoutes from "./Kanbas/users/routes.js";
 import session from "express-session";
 
@@ -41,7 +43,7 @@ if (process.env.NODE_ENV !== "development") {
       domain: process.env.HTTP_SERVER_DOMAIN,
     };
 }
-  
+
 // configure the server to use cookies
 app.use(session(sessionOptions));
 
@@ -54,5 +56,7 @@ CourseRoutes(app);
 ModuleRoutes(app);
 AssignmentRoutes(app)
 UserRoutes(app);
+QuizRoutes(app);
+QuestionRoutes(app);
 
 app.listen(process.env.PORT || 4000);

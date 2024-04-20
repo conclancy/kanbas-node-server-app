@@ -88,6 +88,7 @@ export default function UserRoutes(app) {
     // route to logged-in user's profile
     const profile = async (req, res) => {
         const currentUser = req.session["currentUser"];
+        console.log(currentUser);
         if (!currentUser) {
             res.sendStatus(401).json({ message: "Invalid username or password" });
         } else {
